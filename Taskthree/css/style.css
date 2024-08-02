@@ -1,0 +1,104 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+#tree-container {
+    width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#task-tree {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#task-tree li {
+    position: relative;
+    padding: 10px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.project > label {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #00aced;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+}
+
+.task-checkbox {
+    margin-right: 10px;
+}
+
+.task-name {
+    flex-grow: 1;
+}
+
+.task-name.completed {
+    color: #ccc;
+    text-decoration: line-through;
+}
+
+.project > label.completed {
+    background-color: #ccc;
+    color: #666;
+}
+
+#add-project-btn {
+    display: block;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #00aced;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#form-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    transition: max-height 0.5s ease-out;
+    max-height: 0;
+    overflow: hidden;
+}
+
+#form-container.active {
+    max-height: 500px; /* 適切な高さに調整 */
+}
+
+#project-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#project-form > div {
+    margin-bottom: 10px;
+}
+
+#add-task-btn {
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+#project-form button[type="submit"] {
+    align-self: flex-end;
+}

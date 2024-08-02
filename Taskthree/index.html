@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タスク管理ツリー</title>
+    <link rel="stylesheet" href="css\style.css">
+</head>
+<body>
+    <div id="tree-container">
+        <button id="add-project-btn">プロジェクト追加</button>
+        <div id="form-container" class="hidden">
+            <form id="project-form">
+                <div>
+                    <label for="project-name">プロジェクト名:</label>
+                    <input type="text" id="project-name" name="project-name" required>
+                </div>
+                <div id="tasks-container">
+                    <label>タスク:</label>
+                    <input type="text" name="task-name" class="task-name-input" required>
+                </div>
+                <button type="button" id="add-task-btn">タスク追加</button>
+                <button type="submit">保存</button>
+            </form>
+        </div>
+        <ul id="task-tree">
+            <!-- ツリー構造はJavaScriptで動的に生成 -->
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script\script.js"></script>
+</body>
+</html>
