@@ -1,17 +1,7 @@
 // script.js
 $(document).ready(function() {
-    const STORAGE_KEY = 'taskTreeData';
-
-    // ローカルストレージからデータを取得
-    function loadFromLocalStorage() {
-        const data = localStorage.getItem(STORAGE_KEY);
-        return data ? JSON.parse(data) : { name: 'タスク一覧', children: [] };
-    }
-
-    // ローカルストレージにデータを保存
-    function saveToLocalStorage(data) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    }
+    // ローカルストレージ関連のコードを削除
+    // const STORAGE_KEY = 'taskTreeData';
 
     // タスクツリーを構築
     function buildTree(data) {
@@ -45,8 +35,10 @@ $(document).ready(function() {
 
     const $tree = $('#task-tree');
 
-    // データをロードしてツリーを構築、ローカルストレージからデータを取得
-    const data = loadFromLocalStorage(); 
+    // 初期データを設定
+    const data = { name: 'プロジェクト', children: [] };
+
+    // 初期ツリーの構築
     $tree.append(buildTree(data));
 
     // プロジェクトクリック時の表示・非表示制御
@@ -98,21 +90,18 @@ $(document).ready(function() {
         };
 
         // データを更新して保存
-        const taskListProject = data.children.find(child => child.name === 'タスク一覧');
+        const taskListProject = data.children.find(child => child.name === 'プロジェクト一覧');
         if (taskListProject) {
-            // 既存の「タスク一覧」にプロジェクトを追加
+            // 既存の「プロジェクト一覧」にプロジェクトを追加
             taskListProject.children.push(newProject);
         } else {
-            // 追加部分: 「タスク一覧」が存在しない場合は作成して追加
-            data.children.push({ name: 'タスク一覧', children: [newProject] });
+            // 追加部分: 「プロジェクト一覧」が存在しない場合は作成して追加
+            data.children.push({ name: 'プロジェクト一覧', children: [newProject] });
         }
 
         // ツリーに新しいプロジェクトを追加
         $tree.empty(); // 追加部分: ツリーを再生成するために一旦クリア
         $tree.append(buildTree(data));
-
-        // 追加部分: ローカルストレージに保存
-        saveToLocalStorage(data);
 
         // フォームをリセットして非表示にする
         $('#form-container').removeClass('active').addClass('hidden');
