@@ -4,5 +4,8 @@
   },
   "overrides": {
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+  },
+  "devDependencies": {
+    "xlsx-js-style": "^1.2.0"
   }
 }

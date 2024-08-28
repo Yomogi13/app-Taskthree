@@ -1,7 +1,8 @@
-// script.js
 $(document).ready(function() {
-    // ローカルストレージ関連のコードを削除
-    // const STORAGE_KEY = 'taskTreeData';
+    // dataを初期化
+    const data = { name: 'プロジェクト一覧', children: [] };
+
+    const STORAGE_KEY = 'taskTreeData';
 
     // タスクツリーを構築
     function buildTree(data) {
@@ -35,16 +36,9 @@ $(document).ready(function() {
 
     const $tree = $('#task-tree');
 
-    // 初期データを設定
-    const data = { name: 'プロジェクト', children: [] };
-
-    // 初期ツリーの構築
-    $tree.append(buildTree(data));
-
     // プロジェクトクリック時の表示・非表示制御
     $tree.on('click', '.project > label', function(e) {
         $(this).siblings('ul').toggleClass('hidden');
-        // 親要素へのイベントバブリングを防止
         e.stopPropagation(); 
     });
 
@@ -52,12 +46,30 @@ $(document).ready(function() {
     $tree.on('change', '.task-checkbox', function() {
         $(this).siblings('.task-name').toggleClass('completed', this.checked);
         checkProjectStatus($(this).closest('.project'));
+        updateTable(); // テーブル更新
     });
 
-    // 初期表示時にプロジェクトの状態を確認
-    $tree.find('.project').each(function() {
-        checkProjectStatus($(this));
-    });
+    // テーブルタグへのデータ反映
+    function updateTable() {
+        const $tableBody = $('#task-table tbody');
+        $tableBody.empty(); // テーブルの内容をクリア
+
+        function addRowToTable(node, indent = 0) {
+            const $row = $('<tr>');
+            const $cell = $('<td>').text(' '.repeat(indent * 2) + node.name);
+            $row.append($cell);
+            $tableBody.append($row);
+
+            if (node.children) {
+                node.children.forEach(child => addRowToTable(child, indent + 1));
+            }
+        }
+
+        addRowToTable(data);
+    }
+
+    // 初期表示時にテーブルを更新
+    updateTable();
 
     // フォームの表示・非表示制御
     $('#add-project-btn').on('click', function() {
@@ -89,21 +101,17 @@ $(document).ready(function() {
             children: taskNames.map(name => ({ name: name }))
         };
 
-        // データを更新して保存
-        const taskListProject = data.children.find(child => child.name === 'プロジェクト一覧');
+        const taskListProject = data.children.find(child => child.name === 'タスク一覧');
         if (taskListProject) {
-            // 既存の「プロジェクト一覧」にプロジェクトを追加
             taskListProject.children.push(newProject);
         } else {
-            // 追加部分: 「プロジェクト一覧」が存在しない場合は作成して追加
-            data.children.push({ name: 'プロジェクト一覧', children: [newProject] });
+            data.children.push({ name: 'タスク一覧', children: [newProject] });
         }
 
-        // ツリーに新しいプロジェクトを追加
-        $tree.empty(); // 追加部分: ツリーを再生成するために一旦クリア
+        $tree.empty(); // ツリーを再生成するために一旦クリア
         $tree.append(buildTree(data));
+        updateTable(); // テーブルを更新
 
-        // フォームをリセットして非表示にする
         $('#form-container').removeClass('active').addClass('hidden');
         $('#project-form')[0].reset();
         $('#tasks-container').html('<label>タスク:</label><input type="text" name="task-name" class="task-name-input" required>');
