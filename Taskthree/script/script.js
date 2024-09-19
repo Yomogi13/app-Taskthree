@@ -1,4 +1,6 @@
-$(document).ready(function() {
+$(document).ready(function () {
+    console.log(typeof XLSX); // 'object' が期待される結果
+
     // dataを初期化
     const data = { name: 'プロジェクト一覧', children: [] };
 
@@ -37,13 +39,13 @@ $(document).ready(function() {
     const $tree = $('#task-tree');
 
     // プロジェクトクリック時の表示・非表示制御
-    $tree.on('click', '.project > label', function(e) {
+    $tree.on('click', '.project > label', function (e) {
         $(this).siblings('ul').toggleClass('hidden');
-        e.stopPropagation(); 
+        e.stopPropagation();
     });
 
     // チェックボックス押下時のタイトル非活性化
-    $tree.on('change', '.task-checkbox', function() {
+    $tree.on('change', '.task-checkbox', function () {
         $(this).siblings('.task-name').toggleClass('completed', this.checked);
         checkProjectStatus($(this).closest('.project'));
         updateTable(); // テーブル更新
@@ -66,13 +68,17 @@ $(document).ready(function() {
         }
 
         addRowToTable(data);
+
+        // テーブルが更新された後に、Excelファイルの出力を準備
+        prepareExcelExport();
     }
 
     // 初期表示時にテーブルを更新
     updateTable();
 
     // フォームの表示・非表示制御
-    $('#add-project-btn').on('click', function() {
+    $('#add-project-btn').on('click', function () {
+        console.log('プロジェクト追加ボタンがクリックされました');
         $('#form-container').toggleClass('hidden');
         if ($('#form-container').hasClass('hidden')) {
             $('#form-container').removeClass('active');
@@ -82,17 +88,17 @@ $(document).ready(function() {
     });
 
     // タスク追加ボタン
-    $('#add-task-btn').on('click', function() {
+    $('#add-task-btn').on('click', function () {
         const $taskInput = $('<input type="text" name="task-name" class="task-name-input" required>');
         $('#tasks-container').append($taskInput);
     });
 
     // フォームの送信処理
-    $('#project-form').on('submit', function(e) {
+    $('#project-form').on('submit', function (e) {
         e.preventDefault();
 
         const projectName = $('#project-name').val();
-        const taskNames = $('.task-name-input').map(function() {
+        const taskNames = $('.task-name-input').map(function () {
             return $(this).val();
         }).get();
 
@@ -116,4 +122,24 @@ $(document).ready(function() {
         $('#project-form')[0].reset();
         $('#tasks-container').html('<label>タスク:</label><input type="text" name="task-name" class="task-name-input" required>');
     });
+
+   // Excel出力の準備
+function prepareExcelExport() {
+    const table = document.getElementById('task-table'); // テーブルのIDを指定
+    const workbook = XLSX.utils.table_to_book(table); // xlsx -> XLSX へ変更
+
+    for (const sheet of Object.values(workbook.Sheets)) {
+        for (const rangeName in sheet) {
+            if (rangeName.indexOf('!') === 0) continue;
+            const s = sheet[rangeName]?.s || {};
+            s.alignment = { vertical: 'top' };
+            s.font = { name: 'Yu Gothic medium', sz: 12, color: { rgb: '223344' } };
+            sheet[rangeName] = { ...sheet[rangeName], s };
+        }
+    }
+
+    // ファイル出力処理を実行
+    XLSX.writeFile(workbook, 'タスク一覧.xlsx'); // xlsx -> XLSX へ変更
+        
+    }
 });
