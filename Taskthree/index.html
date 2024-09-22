@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タスク管理ツリー</title>
-    <link rel="stylesheet" href="css\style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="tree-container">
@@ -23,15 +23,21 @@
                 <button type="submit">保存</button>
             </form>
         </div>
-        <ul id="task-tree">
-            <!-- ツリー構造はJavaScriptで動的に生成 -->
-        </ul>
-        <div id="table-container"></div>
-            <button id="export-btn">Excel出力</button>
 
+        <!-- ツリー構造はJavaScriptで動的に生成 -->
+        <ul id="task-tree"></ul>
+
+        <!-- テーブルはJavaScriptで動的に生成 -->
+        <div id="table-container"></div>
+
+        <button id="export-btn">Excel出力</button>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
-    <script src="script\script.js"></script>
+    <script>
+        console.log(typeof XLSX); // 'object' が出力されることを確認
+    </script>
+    <script src="script/script.js"></script>
 </body>
 </html>
