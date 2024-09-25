@@ -1,5 +1,15 @@
 $(document).ready(function () {
 
+    // テスト用のダミーデータ
+    const data = {
+        name: 'プロジェクトA',
+        children: [
+            { name: 'タスク1' },
+            { name: 'タスク2', children: [{ name: 'サブタスク1' }] },
+            { name: 'タスク3' }
+        ]
+    };
+
     function updateTable() {
         const $tableContainer = $('#table-container');
         console.log('debug1');
@@ -30,7 +40,7 @@ $(document).ready(function () {
         }
 
         console.log('debug4 - Starting to add rows to the table');
-        // テーブルボディにタスクを追加する関数
+
         function addRowToTable(node, indent = 0) {
             console.log('Adding row for node:', node); // ノードの内容を表示
             const $row = $('<tr>');
@@ -46,16 +56,13 @@ $(document).ready(function () {
             }
         }
 
-        console.log('Data:', JSON.stringify(data, null, 2)); // 構造を確認しやすくするためのフォーマット
+        console.log('Data:', JSON.stringify(data, null, 2));
 
         if (!data) {
-            console.log('Data:', JSON.stringify(data, null, 2)); // 構造を確認しやすくするためのフォーマット
-
             console.error('Data object is missing or empty:', data);
         } else {
             console.log('Before adding rows');
-            console.log('Initial data:', JSON.stringify(data, null, 2)); // data の内容を表示
-            addRowToTable(data); // 正しいデータが渡されているか確認
+            addRowToTable(data);
             console.log('After adding rows');
         }
     }
